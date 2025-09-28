@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables for runtime theming */
+:root {
+  --apex-black: #0B0B0C;
+  --apex-grey: #111214;
+  --apex-red: #E10600;
+  --apex-white: #FFFFFF;
+  --apex-muted: #A6A6A6;
+  --carbon-texture: url('/assets/bg-carbon.png');
+}
+
+/* Base styles */
+@layer base {
+  * {
+    @apply border-gray-800;
+  }
+  
+  body {
+    @apply bg-apex-black text-apex-white font-sans;
+    @apply antialiased;
+    /* Smooth scrolling for the whole page */
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--apex-grey);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--apex-red);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B91C1C;
+  }
+
+  /* Selection styles */
+  ::selection {
+    background: var(--apex-red);
+    color: var(--apex-white);
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-apex-red ring-offset-2 ring-offset-apex-black;
+  }
+
+  /* Heading defaults */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl xl:text-display-lg font-bold;
+    @apply leading-tight tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+    @apply leading-tight tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
+    @apply leading-tight;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  /* Link defaults */
+  a {
+    @apply transition-colors duration-300;
+  }
+
+  a:hover {
+    @apply text-apex-red;
+  }
+}
+
+/* Component layer - reusable component classes */
+@layer components {
+  /* Button base styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg;
+    @apply font-medium transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-apex-red text-white hover:bg-red-700;
+    @apply shadow-lg hover:shadow-apex-red;
+    @apply focus:ring-apex-red focus:ring-offset-apex-black;
+  }
+
+  .btn-secondary {
+    @apply btn border-2 border-apex-white text-apex-white;
+    @apply hover:bg-apex-white hover:text-apex-black;
+    @apply focus:ring-apex-white focus:ring-offset-apex-black;
+  }
+
+  .btn-outline {
+    @apply btn border border-apex-red text-apex-red;
+    @apply hover:bg-apex-red hover:text-white;
+    @apply focus:ring-apex-red focus:ring-offset-apex-black;
+  }
+
+  /* Form elements */
+  .form-input {
+    @apply w-full px-4 py-3 bg-apex-grey border border-gray-700;
+    @apply rounded-lg text-white placeholder-apex-muted;
+    @apply focus:border-apex-red focus:ring-1 focus:ring-apex-red;
+    @apply transition-colors duration-200;
+  }
+
+  .form-textarea {
+    @apply form-input resize-none min-h-[120px];
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-apex-white mb-2;
+  }
+
+  /* Card components */
+  .card {
+    @apply bg-apex-grey rounded-xl p-6;
+    @apply border border-gray-800;
+    @apply shadow-apex;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300;
+    @apply hover:border-apex-red/30 hover:shadow-apex-red;
+    @apply cursor-pointer;
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Gradient text effect */
+  .gradient-text {
+    @apply bg-gradient-to-r from-apex-red to-red-400;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Loading states */
+  .loading {
+    @apply animate-pulse;
+  }
+
+  .loading-dots::after {
+    content: '';
+    @apply inline-block w-4 h-4 ml-2;
+    @apply bg-apex-red rounded-full;
+    animation: loading-dots 1.4s infinite ease-in-out both;
+  }
+
+  /* Carbon fiber texture utility */
+  .texture {
+    background-image: var(--carbon-texture);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  .texture-subtle {
+    background-image: var(--carbon-texture);
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    opacity: 0.1;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply backdrop-blur-md bg-black/20;
+    @apply border border-white/10;
+  }
+
+  /* Glow effects */
+  .glow-red {
+    @apply shadow-apex-red;
+    box-shadow: 0 0 20px rgba(225, 6, 0, 0.3);
+  }
+
+  .glow-red-strong {
+    box-shadow: 0 0 40px rgba(225, 6, 0, 0.6);
+  }
+
+  /* Animation utilities */
+  .fade-in {
+    @apply animate-fade-in;
+  }
+
+  .fade-in-up {
+    @apply animate-fade-in-up;
+  }
+
+  .slide-in-right {
+    @apply animate-slide-in-right;
+  }
+
+  /* Custom grid for responsive layouts */
+  .grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .grid-auto-fill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* Utilities layer - single purpose utilities */
+@layer utilities {
+  /* Custom aspect ratios */
+  .aspect-car {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-portrait {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Text shadow utilities */
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Clip path utilities for modern shapes */
+  .clip-arrow {
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+  }
+
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+  }
+
+  /* Scrollbar utilities */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Performance utilities */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .prevent-layout-shift {
+    contain: layout style paint;
+  }
+}
+
+/* Animations and keyframes */
+@keyframes loading-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+/* Model viewer customizations */
+model-viewer {
+  --poster-color: transparent;
+  --progress-bar-color: var(--apex-red);
+  --progress-mask: rgba(0, 0, 0, 0.8);
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep essential animations that don't cause motion sickness */
+  .preserve-animation {
+    animation-duration: inherit !important;
+    transition-duration: inherit !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --apex-red: #FF0000;
+    --apex-white: #FFFFFF;
+    --apex-black: #000000;
+  }
+
+  .card {
+    @apply border-2 border-white;
+  }
+
+  .btn-primary {
+    @apply border-2 border-white;
+  }
+}
+
+/* Dark mode (default) - explicit for clarity */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
