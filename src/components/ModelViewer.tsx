@@ -76,7 +76,7 @@ export default function ModelViewer({
     const loadModelViewer = async () => {
       try {
         if (typeof window !== 'undefined' && !customElements.get('model-viewer')) {
-          const { default: modelViewer } = await import('@google/model-viewer');
+          await import('@google/model-viewer');
           setModelViewerLoaded(true);
         } else {
           setModelViewerLoaded(true);
