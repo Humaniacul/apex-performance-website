@@ -96,8 +96,8 @@ export default function ModelViewer({
     onLoading?.(false);
   };
 
-  const handleModelError = (event: CustomEvent) => {
-    console.warn('Model failed to load:', event.detail);
+  const handleModelError = (event: any) => {
+    console.warn('Model failed to load:', event.detail || event);
     setHasError(true);
     setIsLoading(false);
     onError?.('Model failed to load');
