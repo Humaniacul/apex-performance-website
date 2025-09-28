@@ -71,7 +71,7 @@ export default function SpecStrip({
   const stripRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(stripRef, { 
     threshold: 0.5,
-    margin: "-100px"
+    rootMargin: "-100px"
   });
 
   useEffect(() => {
