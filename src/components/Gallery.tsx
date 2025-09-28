@@ -113,7 +113,7 @@ export default function Gallery({
   const galleryRef = useRef<HTMLDivElement>(null);
 
   // Get unique categories
-  const categories = ['All', ...Array.from(new Set(images.map(img => img.category).filter(Boolean)))];
+  const categories: string[] = ['All', ...Array.from(new Set(images.map(img => img.category).filter(Boolean) as string[]))];
   
   // Filter images by category
   const filteredImages = selectedCategory === 'All' 
