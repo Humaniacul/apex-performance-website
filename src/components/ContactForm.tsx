@@ -240,7 +240,6 @@ export default function ContactForm({
             {/* Netlify form detection */}
             <form
               name="apex-contact"
-              netlify="true"
               hidden
               data-netlify="true"
               data-netlify-honeypot="bot-field"
