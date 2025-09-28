@@ -17,7 +17,7 @@ interface ConfigOption {
 interface ConfigCategory {
   id: string;
   name: string;
-  icon: React.ComponentType<{ size?: number }>;
+  icon: React.ComponentType<any>;
   options: ConfigOption[];
 }
 
