@@ -70,7 +70,6 @@ export default function SpecStrip({
   const [isSticky, setIsSticky] = useState(false);
   const stripRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(stripRef, { 
-    threshold: 0.5,
     rootMargin: "-100px"
   });
 
