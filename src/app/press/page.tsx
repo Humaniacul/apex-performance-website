@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -77,6 +77,20 @@ const pressArticles = [
 
 const categories = ['All', 'Company News', 'Technology', 'Motorsport', 'Sustainability', 'Customer Experience'];
 
+type Article = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  author?: string;
+  date: string;
+  category?: string;
+  featured?: boolean;
+  image?: string;
+  tags?: string[];
+  readTime?: string;
+};
+
 /**
  * Press Page Component
  * Features: Article filtering, search, featured content, responsive grid
@@ -84,19 +98,64 @@ const categories = ['All', 'Company News', 'Technology', 'Motorsport', 'Sustaina
 export default function PressPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [fetchedArticles, setFetchedArticles] = useState<Article[]>([]);
+
+  // Fetch published articles from Supabase (public, RLS must allow select on status='published')
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !anon) return; // envs not set on local maybe
+
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(
+          `${url}/rest/v1/articles?select=id,title,slug,excerpt,cover_image,author,tags,published_at,category,featured,status&status=eq.published&order=published_at.desc`,
+          {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${anon}`,
+              'apikey': anon,
+            },
+            signal: controller.signal,
+          }
+        );
+        if (!res.ok) return;
+        const rows = await res.json();
+        const mapped: Article[] = rows.map((r: any) => ({
+          id: String(r.id),
+          title: r.title,
+          slug: r.slug,
+          excerpt: r.excerpt ?? '',
+          author: r.author ?? 'Apex Performance',
+          date: r.published_at ?? new Date().toISOString(),
+          category: r.category ?? 'News',
+          featured: Boolean(r.featured),
+          image: r.cover_image ?? '/assets/car-hero.jpg',
+          tags: Array.isArray(r.tags) ? r.tags : [],
+          readTime: '5 min read',
+        }));
+        setFetchedArticles(mapped);
+      } catch (_) {
+        // ignore; fallback to mock
+      }
+    })();
+    return () => controller.abort();
+  }, []);
+
+  const sourceArticles = fetchedArticles.length > 0 ? fetchedArticles : pressArticles;
 
   // Filter articles based on category and search
   const filteredArticles = useMemo(() => {
-    return pressArticles.filter(article => {
+    return sourceArticles.filter(article => {
       const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       const matchesSearch = searchQuery === '' || 
         article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      
+        (article.excerpt || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (article.tags || []).some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, sourceArticles]);
 
   const featuredArticles = filteredArticles.filter(article => article.featured);
   const regularArticles = filteredArticles.filter(article => !article.featured);
@@ -203,7 +262,7 @@ export default function PressPage() {
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={article.image}
+                      src={article.image as string}
                       alt={article.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -299,7 +358,7 @@ export default function PressPage() {
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <Image
-                      src={article.image}
+                      src={article.image as string}
                       alt={article.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
