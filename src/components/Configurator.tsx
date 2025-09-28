@@ -191,7 +191,7 @@ export default function Configurator({
     .find(cat => cat.id === 'paint')
     ?.options.find(opt => opt.id === configuration.paint);
   
-  const mainImage = currentPaintOption?.image || configCategories[0].options[0].image;
+  const mainImage = currentPaintOption?.image || configCategories[0].options[0].image || '/assets/car-hero.jpg';
 
   useEffect(() => {
     onConfigurationChange?.(configuration);
